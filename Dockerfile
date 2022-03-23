@@ -1,2 +1,2 @@
-FROM jdecode/php-8.1:laravel-node16
+FROM jdecode/php-8.1:laravel-newman
 
