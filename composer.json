@@ -119,10 +119,10 @@
                 ]
             },
             "pre-commit": [
-                "docker-compose exec -T laravel-api composer run pre-commit"
+                "docker-compose exec -T my-diary-api composer run pre-commit"
             ],
             "pre-push": [
-                "docker-compose exec -T laravel-api composer run pre-push"
+                "docker-compose exec -T my-diary-api composer run pre-push"
             ]
         }
     },
