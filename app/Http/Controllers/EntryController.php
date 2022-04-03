@@ -28,7 +28,8 @@ class EntryController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        Entry::create($request->all());
+        $entry = Entry::create($request->all());
+        $entry->addToIndex();
         return Redirect::route('entries.index');
     }
 }

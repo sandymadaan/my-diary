@@ -8,6 +8,7 @@
         "php": "^8.1",
         "ext-pdo": "*",
         "doctrine/dbal": "^3.3",
+        "elasticquent/elasticquent": "^1.0",
         "fruitcake/laravel-cors": "^2.0.5",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.5.4",

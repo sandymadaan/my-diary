@@ -176,6 +176,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Elasticquent\ElasticquentServiceProvider::class,
 
     ],
 
@@ -192,6 +193,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // ...
+        'Es' => Elasticquent\ElasticquentElasticsearchFacade::class,
     ])->toArray(),
 
 ];
