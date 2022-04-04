@@ -42,6 +42,7 @@ jobs:
           command: docker-compose exec my-diary-api newman run https://api.getpostman.com/collections/${POSTMAN_COLLECTION_ID}?apikey=${POSTMAN_API_KEY} -e https://api.getpostman.com/environments/${POSTMAN_ENV_ID}?apikey=${POSTMAN_API_KEY}
        
   deploy:
+    machine: true
     working_directory: ~/code
     steps:
       - checkout
