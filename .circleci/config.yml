@@ -1,25 +1,91 @@
-version: 2 # CircleCI version
-jobs:
-  build:
-    machine: true # Use a Linux VM instead of docker environment
-    working_directory: ~/my-diary
-    environment:
-        - CIRCLE_PROJECT_REPONAME: my-diary
+###
+# Replace "fl-laravel_boilerplate" with your project repo name, e.g. "super_awesome_website-api"
+###
 
+version: 2
+notify:
+  webhooks:
+    # Reviewee webhook, to receive CircleCI build status
+    - url: https://api.reviewee.it/notification/ci
+
+jobs:
+  validate:
+    docker:
+     - image: jdecode/php-8.1:laravel-newman
+       environment:
+         CIRCLE_PROJECT_REPONAME: my-diary
     steps:
-        - run: |
-            if [[ ${CIRCLE_SHELL_ENV} =~ "localbuild" ]]; then
-                mkdir -p /tmp
-            fi
-        - checkout
-        - run: docker-compose up -d
-        - run: docker-compose exec my-diary-api cp .env.example .env
-        - run: docker-compose exec my-diary-api composer install -n --prefer-dist
-        - run: docker-compose exec my-diary-api chmod 755 -R vendor/
-        - run: docker-compose exec my-diary-api chmod 777 -R storage/
-        - run: docker-compose exec my-diary-api cp .env.example .env
-        - run: docker-compose exec my-diary-api php artisan migrate --force
-        - run: docker-compose exec my-diary-api newman run https://api.getpostman.com/collections/${POSTMAN_COLLECTION_ID}?apikey=${POSTMAN_API_KEY} -e https://api.getpostman.com/environments/${POSTMAN_ENV_ID}?apikey=${POSTMAN_API_KEY}
-        - run:
-            name: Heroku Staging Deploy
-            command: git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_UAT_APP_NAME.git HEAD:refs/heads/master
+      - checkout
+      - run:
+          name: Docker compose up, in detatched/background mode
+          command: docker-compose up -d
+      - run:
+          name: Composer install
+          command: docker-compose exec my-diary-api composer install -n --prefer-dist
+      - run:
+          name: CI checks
+          command: docker-compose exec my-diary-api composer run ci
+      - run:
+          name: Change the permission of vendor folder
+          command: docker-compose exec my-diary-api chmod 755 -R vendor/
+      - run:
+          name: Change the permission of storage folder
+          command: docker-compose exec my-diary-api chmod 777 -R storage/
+      - run:
+          name: Create the env file
+          command: docker-compose exec my-diary-api cp .env.example .env
+      - run:
+          name: Run the migrations
+          command: docker-compose exec my-diary-api php artisan migrate --force
+      - run: 
+          name: Run Newman testcases
+            command: docker-compose exec my-diary-api newman run https://api.getpostman.com/collections/${POSTMAN_COLLECTION_ID}?apikey=${POSTMAN_API_KEY} -e https://api.getpostman.com/environments/${POSTMAN_ENV_ID}?apikey=${POSTMAN_API_KEY}
+       
+  deploy:
+    working_directory: ~/code
+    steps:
+      - checkout
+      - run:
+         name: Heroku Staging Deploy
+         command: git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_UAT_APP_NAME.git HEAD:refs/heads/master
+
+  # Please remove this job when cloning the repo for your project
+  # This job is for reporting CI issues on Slack's #php channel (F+L)
+  boilerplate_job:
+    machine: true
+    working_directory: ~/boilerplate
+    steps:
+#      - run:
+#          name: Check rejected commits
+#          command: wget ${REVIEWEE_URL}/repository/${CIRCLE_PROJECT_REPONAME}/haveRejectedCommits -q -O - | grep -q ${COMMITS_CHECK_INDICATOR}
+#          environment:
+#            - CIRCLE_PROJECT_REPONAME: fl-laravel_boilerplate
+#            - REVIEWEE_URL: https://api.reviewee.it
+#            - COMMITS_CHECK_INDICATOR: \"success\":true
+      - checkout
+      - run:
+         name: Docker compose up, in detatched/background mode
+         command: docker-compose up -d
+      - run:
+         name: Composer install
+         command: docker-compose exec my-diary-api composer install
+      - run:
+         name: CI checks
+         command: docker-compose exec my-diary-api composer run ci
+      - run:
+         name: Exit CI
+         command: exit 0
+
+workflows:
+  version: 2
+  validate-and-deploy:
+    jobs:
+      # Please uncomment below lines when cloning the repo for your project
+      - validate
+      - deploy:
+         requires:
+         - validate
+
+      # Please remove below line when cloning the repo for your project
+      #- boilerplate_job
+
