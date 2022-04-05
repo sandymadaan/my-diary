@@ -23,18 +23,6 @@ jobs:
       - run:
           name: CI checks
           command: docker-compose exec my-diary-api composer run ci
-      - run:
-          name: Change the permission of vendor folder
-          command: docker-compose exec my-diary-api chmod 755 -R vendor/
-      - run:
-          name: Change the permission of storage folder
-          command: docker-compose exec my-diary-api chmod 777 -R storage/
-      - run:
-          name: Create the env file
-          command: docker-compose exec my-diary-api cp .env.example .env
-      - run:
-          name: Run the migrations
-          command: docker-compose exec my-diary-api php artisan migrate --force
       - run: 
           name: Run Newman testcases
           command: docker-compose exec my-diary-api newman run https://api.getpostman.com/collections/${POSTMAN_COLLECTION_ID}?apikey=${POSTMAN_API_KEY} -e https://api.getpostman.com/environments/${POSTMAN_ENV_ID}?apikey=${POSTMAN_API_KEY}
