@@ -10,14 +10,15 @@ notify:
 
 jobs:
   validate:
-    docker:
-     - image: jdecode/php-8.1:laravel-newman
-       environment:
-         CIRCLE_PROJECT_REPONAME: my-diary
+    machine: true # Use a Linux VM instead of docker environment
+    working_directory: ~/my-diary
+    environment:
+        - CIRCLE_PROJECT_REPONAME: my-diary
     steps:
       - checkout
       - run:
-          name: Docker compose up, in detatched/background mode
+          name: Docker compose up, 
+          detatched/background mode
           command: docker-compose up -d
       - run:
           name: Composer install
