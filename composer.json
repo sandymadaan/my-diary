@@ -92,6 +92,7 @@
             "@post-root-package-install",
             "chmod -R 777 storage bootstrap",
             "@php artisan key:generate",
+            "@php artisan migrate --seed",
             "@php artisan key:generate --env=testing",
             "@tests"
         ],
