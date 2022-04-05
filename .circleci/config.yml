@@ -12,13 +12,10 @@ jobs:
   validate:
     machine: true # Use a Linux VM instead of docker environment
     working_directory: ~/my-diary
-    environment:
-        - CIRCLE_PROJECT_REPONAME: my-diary
     steps:
       - checkout
       - run:
-          name: Docker compose up, 
-          detatched/background mode
+          name: Docker compose up, in detatched/background mode
           command: docker-compose up -d
       - run:
           name: Composer install
@@ -43,7 +40,7 @@ jobs:
           command: docker-compose exec my-diary-api newman run https://api.getpostman.com/collections/${POSTMAN_COLLECTION_ID}?apikey=${POSTMAN_API_KEY} -e https://api.getpostman.com/environments/${POSTMAN_ENV_ID}?apikey=${POSTMAN_API_KEY}
        
   deploy:
-    machine: true
+    - image: jdecode/php-8.1:laravel-newman
     working_directory: ~/code
     steps:
       - checkout
