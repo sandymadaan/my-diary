@@ -12,6 +12,7 @@ jobs:
   validate:
     machine:
       image: ubuntu-2004:202201-02
+    resource_class: medium
     working_directory: ~/my-diary
     steps:
       - checkout
@@ -29,7 +30,9 @@ jobs:
           command: docker-compose exec my-diary-api newman run https://api.getpostman.com/collections/${POSTMAN_COLLECTION_ID}?apikey=${POSTMAN_API_KEY} -e https://api.getpostman.com/environments/${POSTMAN_ENV_ID}?apikey=${POSTMAN_API_KEY}
        
   deploy:
-    machine: true # Use a Linux VM instead of docker environment
+    machine:
+      image: ubuntu-2004:202201-02
+    resource_class: medium
     working_directory: ~/code
     steps:
       - checkout
@@ -40,7 +43,9 @@ jobs:
   # Please remove this job when cloning the repo for your project
   # This job is for reporting CI issues on Slack's #php channel (F+L)
   boilerplate_job:
-    machine: true
+    machine:
+      image: ubuntu-2004:202201-02
+    resource_class: medium
     working_directory: ~/boilerplate
     steps:
 #      - run:
