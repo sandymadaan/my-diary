@@ -12,7 +12,6 @@ jobs:
   validate:
     machine:
       image: ubuntu-2004:202201-02
-    resource_class: small
     working_directory: ~/my-diary
     steps:
       - checkout
