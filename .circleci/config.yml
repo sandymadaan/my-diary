@@ -2,7 +2,7 @@
 # Replace "fl-laravel_boilerplate" with your project repo name, e.g. "super_awesome_website-api"
 ###
 
-version: 2
+version: 2.1
 notify:
   webhooks:
     # Reviewee webhook, to receive CircleCI build status
@@ -10,7 +10,8 @@ notify:
 
 jobs:
   validate:
-    machine: true # Use a Linux VM instead of docker environment
+    machine:
+      image: ubuntu-2004:202201-02
     working_directory: ~/my-diary
     steps:
       - checkout
