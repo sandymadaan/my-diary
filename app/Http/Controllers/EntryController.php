@@ -10,6 +10,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
+use Elasticsearch;
 
 class EntryController extends Controller
 {
@@ -29,7 +30,13 @@ class EntryController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $entry = Entry::create($request->all());
-        $entry->addToIndex();
+        $data = [
+            'body' => ['id' => $entry->id, 'entries' => $entry->entry],
+            'index' => 'mydiary',
+            'type' => '_doc',
+            'id' => $entry->id
+        ];
+        Elasticsearch::index($data);
         return Redirect::route('entries.index');
     }
 }
