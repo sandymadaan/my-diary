@@ -3,7 +3,6 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\EntryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,3 +31,4 @@ Route::get('/dashboard', function () {
 require __DIR__.'/auth.php';
 
 Route::resource('entries', EntryController::class)->middleware(['auth', 'verified']);
+Route::get('/search', "EntryController@search");
