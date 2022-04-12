@@ -11,7 +11,7 @@ services:
       - .:/var/www/html
     restart: always
     ports:
-      - "2233:80"
+      - "2234:80"
     environment:
       APP_NAME: 'F+L my-diary Boilerplate'
       APP_DEBUG: 'true'
