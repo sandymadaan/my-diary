@@ -2,10 +2,31 @@ import React, {useState} from 'react';
 import Authenticated from '@/Layouts/Authenticated';
 import { Head } from '@inertiajs/inertia-react';
 import AddEntry from "@/Pages/Entries/AddEntry";
+import axios from 'axios';
 
 export default function Index(props) {
     const [showModal, setShowModal] = useState(false);
     
+    const [search, setSearch] = useState("");
+
+    const [entries, setEntries] = useState(props.entries)
+    const handleSearch =  (event) => {
+        event.persist();
+        var keyword = event.target.value;
+        setSearch(event.target.value);
+        if(keyword != '') {
+            axios.get('/search?keyword=' + keyword)
+            .then(function (response) {
+                setEntries(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        } else {
+            setEntries(props.entries);
+        }
+        
+      };
 
     return (
         <Authenticated
@@ -25,18 +46,18 @@ export default function Index(props) {
                                 <thead className="bg-gray-50">
                                 <tr>
                                     <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Daily Entry</th>
-                                    <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                                        <span className="sr-only">Edit</span>
+                                    <th scope="col" className="py-3.5 pl-3 pr-4 sm:pr-6">
+                                        <input type="text" placeholder="Search" value={search} onChange={ handleSearch } />
                                     </th>
                                 </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200 bg-white">
-                            {props.entries.data.map((entry, index)  => (  
+                            {entries ? (entries.data.map((entry, index)  => (  
                                 <tr>
                                 <td className="px-6 py-2 border-b border-gray-200 rounded-t-lg">{entry.entry}</td>
                                 <td className="px-6 py-2 border-b border-gray-200 rounded-t-lg">Edit</td>
                                 </tr>
-                            ))}
+                            ))) : <tr>No record found</tr> }
                             </tbody>
 
                         </table>
