@@ -25,10 +25,7 @@ jobs:
       - run:
           name: CI checks
           command: docker-compose exec my-diary-api composer run ci
-      - run: 
-          name: Run Newman testcases
-      #    command: docker-compose exec my-diary-api newman run https://api.getpostman.com/collections/${POSTMAN_COLLECTION_ID}?apikey=${POSTMAN_API_KEY} -e https://api.getpostman.com/environments/${POSTMAN_ENV_ID}?apikey=${POSTMAN_API_KEY}
-       
+
   deploy:
     machine:
       image: ubuntu-2004:202201-02
