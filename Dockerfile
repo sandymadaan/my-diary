@@ -1,2 +1,1 @@
-FROM jdecode/php-8.1:laravel-newman
-
+FROM jdecode/php-8.1:laravel-xdebug

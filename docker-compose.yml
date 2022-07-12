@@ -17,10 +17,18 @@ services:
       APP_DEBUG: 'true'
       APP_URL: 'http://220.233.1.1'
       DB_CONNECTION: 'pgsql'
+      XDEBUG_ENABLED: 1
+      XDEBUG_REMOTE_AUTOSTART: 1
+      XDEBUG_MAXNESTING_LEVEL: 1000
+      XDEBUG_REMOTE_CONNECT_BACK: 1
+      XDEBUG_REMOTE_HOST: host.docker.internal
+      XDEBUG_REMOTE_PORT: 9003
+    extra_hosts:
+      - "host.docker.internal:220.233.1.1"
     networks:
       my-diary-api-network:
         ipv4_address: 220.233.1.1
-
+  
   my-diary-pg:
     image: postgres:latest
     restart: always

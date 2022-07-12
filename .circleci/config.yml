@@ -13,7 +13,7 @@ jobs:
     machine:
       image: ubuntu-2004:202201-02
     resource_class: medium
-    working_directory: ~/my-diary
+    working_directory: ~/code
     steps:
       - checkout
       - run:
