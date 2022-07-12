@@ -17,6 +17,7 @@ class SentimentController extends Controller
         $sentiment = $annotation->sentiment();
         echo $sentiment['score'];
         echo $sentiment['magnitude'];
+        
         //FetchSentiments::dispatchSync();
     }
 }
