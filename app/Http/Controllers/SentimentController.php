@@ -11,6 +11,7 @@ class SentimentController extends Controller
     public function index()
     {
         echo "running jobs";
+        
         FetchSentiments::dispatchSync();
     }
 }
