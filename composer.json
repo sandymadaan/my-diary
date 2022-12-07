@@ -23,7 +23,7 @@
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.12",
-        "brainmaestro/composer-git-hooks": "dev-prepare-for-symfony-6",
+        "brainmaestro/composer-git-hooks": "dev-master",
         "enlightn/security-checker": "^1.0",
         "fakerphp/faker": "^1.9.1",
         "laravel/breeze": "^1.8",
