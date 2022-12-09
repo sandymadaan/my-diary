@@ -1,3 +1,11 @@
-steps:
-- name: 'docker/compose:1.19.0'
+- name: 'docker/compose:1.15.0'
   args: ['up', '-d']
+
+- name: 'docker/compose:1.15.0'
+  args: ['exec', "my-diary-api", "composer", "install"]
+
+- name: 'docker/compose:1.15.0'
+  args: ["exec", "my-diary-api", "composer", "run", "ci"]
+
+# Push the new image to the registry.
+images: ['gcr.io/$PROJECT_ID/gcb-docker-compose:latest']
